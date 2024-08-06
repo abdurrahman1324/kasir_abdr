@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $error = 'Login gagal, periksa kembali username dan password Anda.';
     }
+    
 }
 ?>
 <!DOCTYPE html>

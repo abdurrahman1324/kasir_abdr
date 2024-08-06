@@ -1,14 +1,18 @@
 <?php
+require_once '../../../database/koneksi.php';
+
 class Auth {
     private $pdo;
+    private $error;
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start(); // Mulai session jika belum dimulai
+        }
     }
 
-
     public function login($username, $password) {
-        // Ganti dengan logika validasi pengguna dari database
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE username = :username");
         $stmt->execute(['username' => $username]);
         $user = $stmt->fetch();
@@ -18,6 +22,7 @@ class Auth {
             $_SESSION['username'] = $user['username'];
             return true;
         } else {
+            $this->error = 'Username atau password salah';
             return false;
         }
     }
@@ -39,6 +44,10 @@ class Auth {
             return $stmt->fetch();
         }
         return null;
+    }
+
+    public function getError() {
+        return $this->error;
     }
 }
 ?>

@@ -19,12 +19,8 @@ class Koneksi {
 
             try {
                 self::$pdo = new PDO($dsn, $user, $pass, $options);
-                // Uncomment the line below for debugging purposes only
-                // echo "Koneksi berhasil";
-            } catch (\PDOException $e) {
-                // Log the error or handle it
-                error_log("Koneksi gagal: " . $e->getMessage());
-                throw new Exception("Koneksi gagal, silakan coba lagi nanti.");
+            } catch (PDOException $e) {
+                throw new PDOException($e->getMessage(), (int)$e->getCode());
             }
         }
         return self::$pdo;
