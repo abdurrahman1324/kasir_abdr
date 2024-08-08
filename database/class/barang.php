@@ -38,7 +38,7 @@ class Barang {
     }
 
     // Mengupdate data barang
-    public function updateBarang($id_barang, $nama_barang, $gambar_barang, $harga_barang, $jumlah_barang, $id_supplier) {
+    public function updateBarang($id_barang, $nama_barang, $gambar_barang, $harga_barang, $jumlah_barang) {
         $sql = "UPDATE barang 
                 SET nama_barang = :nama_barang, gambar_barang = :gambar_barang, harga_barang = :harga_barang, 
                     jumlah_barang = :jumlah_barang
@@ -60,6 +60,32 @@ class Barang {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id_barang' => $id_barang]);
     }
-    
+
+    // Mengupload gambar
+    public function uploadGambar($file) {
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $file['tmp_name'];
+            $fileName = basename($file['name']); // Menggunakan basename untuk menghindari nama file yang panjang atau path
+            $uploadFileDir = 'gambar_barang/'; // Sesuaikan dengan jalur yang benar
+            $dest_path = $uploadFileDir . $fileName;
+
+            // Validasi file (contoh: hanya izinkan gambar jpg, jpeg, png)
+            $fileSize = $file['size'];
+            $fileType = mime_content_type($fileTmpPath);
+            $allowedTypes = ['image/jpeg', 'image/png'];
+
+            if (in_array($fileType, $allowedTypes) && $fileSize < 5 * 1024 * 1024) { // Maksimal 5MB
+                if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                    return $fileName;
+                } else {
+                    throw new Exception('Terjadi kesalahan saat mengupload gambar.');
+                }
+            } else {
+                throw new Exception('File tidak valid atau terlalu besar.');
+            }
+        } else {
+            throw new Exception('Gambar belum dipilih atau terdapat kesalahan.');
+        }
+    }
 }
 ?>

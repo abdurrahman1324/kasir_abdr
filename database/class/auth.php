@@ -1,5 +1,6 @@
 <?php
-require_once '../../../database/koneksi.php';
+require_once 'C:/laragon/www/kasir_abdr/database/koneksi.php';
+
 
 class Auth {
     private $pdo;

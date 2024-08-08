@@ -1,10 +1,11 @@
-
+<?php
+// Mendapatkan username dari akun yang login
+$username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest';
+?>
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
+  
 
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="/kasir_abdr/assets/Admin LTE/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
 
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -23,10 +24,10 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-        <li class="nav-item  dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw"></i>Abdurrahman<b></b>
-            </a>
+        <li class="nav-item dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="fa fa-user fa-fw"></i><?php echo $username; ?><b></b>
+          </a>
             <div class="dropdown-menu dropdown-menu dropdown-menu-right">
               <a href="/kasir_abdr/app/auth/logout.php" class="dropdown-item text-right">
                 Logout <i class="fas fa-sign-out-alt"></i>
@@ -53,7 +54,7 @@
           <img src="/kasir_abdr/assets/Admin LTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block"><?php echo $username; ?></a>
         </div>
       </div>
 
@@ -61,17 +62,17 @@
      <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Dashboard Item -->
-          <li class="nav-item menu-open">
-            <a href="/kasir_abdr/app/page/dashboard/index.php" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>    
+          <li class="nav-item <?php echo $activePage === 'dashboard' ? 'menu-open' : ''; ?>">
+              <a href="/kasir_abdr/app/page/dashboard/index.php" class="nav-link <?php echo $activePage === 'dashboard' ? 'active' : ''; ?>">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                      Dashboard
+                  </p>
+              </a>
+          </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-home"></i>
+              <i class="nav-icon fas fa-home text-sm"></i>
               <p>
                 Management
                 <i class="fas fa-angle-left right"></i>
@@ -79,7 +80,8 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/kasir_abdr/app/page/barang/barang.php" class="nav-link">
+                
+                <a href="/kasir_abdr/app/page/barang/barang.php" class="nav-link <?php echo $activePage === 'barang' ? 'active' : ''; ?>">
                   <i class="nav-icon fas fa-inbox"></i>
                   <p>Barang</p>
                 </a>
@@ -102,7 +104,8 @@
               </li>
             </ul>
           </li>      
-          <li class="nav-header">USER</li>
+          <li class="nav-header">SETTING  
+          </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
@@ -112,11 +115,11 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <!-- Logout Item -->
+              <!-- User Item -->
               <li class="nav-item">
                 <a href="/kasir_abdr/app/auth/logout.php" class="nav-link">
-                  <i class="fas fa-sign-out-alt nav-icon"></i>
-                  <p>Logout</p>
+                  <i class="fas fa-users nav-icon"></i>
+                  <p>User</p>
                 </a>
               </li>
             </ul>
@@ -125,6 +128,15 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-key"></i>
                   <p>Ganti Password</p>
+                </a>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <!-- Logout Item -->
+              <li class="nav-item">
+                <a href="/kasir_abdr/app/auth/logout.php" class="nav-link">
+                  <i class="fas fa-sign-out-alt nav-icon"></i>
+                  <p>Logout</p>
                 </a>
               </li>
             </ul>
