@@ -5,10 +5,15 @@ require_once '../../../database/class/barang.php';
 $barang = new Barang();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ambil data dari form
-    $nama_barang = $_POST['nama_barang'];
-    $harga_barang = $_POST['harga_barang'];
-    $jumlah_barang = $_POST['jumlah_barang'];
+    // Ambil data dari form dan sanitasi
+    $nama_barang = filter_var($_POST['nama_barang'], FILTER_SANITIZE_STRING);
+    $harga_barang = filter_var($_POST['harga_barang'], FILTER_VALIDATE_FLOAT);
+    $jumlah_barang = filter_var($_POST['jumlah_barang'], FILTER_VALIDATE_INT);
+    
+    if ($harga_barang === false || $jumlah_barang === false) {
+        header('Location: barang.php?error=' . urlencode('Harga atau jumlah tidak valid.'));
+        exit;
+    }
     
     // Proses upload gambar
     try {
@@ -19,11 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Redirect dengan parameter untuk SweetAlert
         header('Location: barang.php?success=true');
-        exit; // Hentikan eksekusi setelah redirection
+        exit;
     } catch (Exception $e) {
         // Redirect dengan pesan error
         header('Location: barang.php?error=' . urlencode($e->getMessage()));
-        exit; // Hentikan eksekusi setelah redirection
+        exit;
     }
 }
 
@@ -61,7 +66,9 @@ include '../../layout/header.php';
                         <label for="jumlah_barang">Jumlah Barang</label>
                         <input type="number" class="form-control" id="jumlah_barang" name="jumlah_barang" required>
                     </div>
-                    <button type="submit" name="add" class="btn btn-primary">Tambah Barang</button>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" name="add" class="btn btn-primary">Tambah Barang</button>
+                    </div>
                 </form>
             </div>
         </div>

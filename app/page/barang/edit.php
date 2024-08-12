@@ -33,7 +33,6 @@ if (isset($_GET['edit'])) {
 
         if (!empty($_FILES['gambar_barang']['name'])) {
             $gambar_baru = $barang->uploadGambar($_FILES['gambar_barang']);
-            // Hapus gambar lama jika ada
             $gambarPathLama = 'gambar_barang/' . $gambar_lama;
             if (file_exists($gambarPathLama)) {
                 unlink($gambarPathLama);
@@ -93,7 +92,10 @@ include '../../layout/header.php';
                         <label for="jumlah_barang">Jumlah Barang</label>
                         <input type="number" class="form-control" id="jumlah_barang" name="jumlah_barang" value="<?php echo htmlspecialchars($barangData['jumlah_barang']); ?>" required>
                     </div>
+                    <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <a href="barang.php" class="btn btn-warning">Kembali</a>
+                    </div>
                 </form>
             </div>
         </div>

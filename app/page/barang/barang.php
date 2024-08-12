@@ -1,17 +1,15 @@
 <?php
-require_once '../../../database/koneksi.php';
-require_once '../../../database/class/barang.php';
+require_once '../database/koneksi.php';
+require_once '../database/class/auth.php';
 
 // Membuat objek Koneksi
 $pdo = Koneksi::connect();
 
 // Set page title
 $title = "Manajemen Barang";
-include '../../layout/header.php';
+$activePage = 'barang';
 ?>
 
-<!-- Sidebar -->
-<?php include '../../layout/sidebar.php'; ?>
 
 <div class="content-wrapper">
     <section class="content lg-12">
@@ -19,7 +17,7 @@ include '../../layout/header.php';
         <!-- Card -->
         <div class="card bg-primary">
             <div class="card-header">
-                <a href="add.php" class="btn btn-success">Tambah Barang</a>
+                <a href="page/barang/add.php" class="btn btn-success">Tambah Barang</a>
             </div>
             <div class="card-body bg-light">
                 <!-- Tabel Barang -->
@@ -48,7 +46,7 @@ include '../../layout/header.php';
                             <td><?php echo htmlspecialchars($row['nama_barang']); ?></td>
                             <td>
                                 <?php if (!empty($row['gambar_barang'])): ?>
-                                    <img src="<?php echo 'http://localhost/kasir_abdr/app/page/barang/gambar_barang/' . htmlspecialchars($row['gambar_barang']); ?>" alt="image" style="width: 100px; height: auto;">
+                                    <img src="<?php echo 'http://localhost/kasir_abdr/app/page/barang/gambar_barang/' . htmlspecialchars($row['gambar_barang']); ?>" alt="Gambar Barang" style="width: 100px; height: auto;">
                                 <?php else: ?>
                                     <p>Gambar tidak tersedia</p>
                                 <?php endif; ?>
@@ -56,7 +54,7 @@ include '../../layout/header.php';
                             <td><?php echo htmlspecialchars($row['harga_barang']); ?></td>
                             <td><?php echo htmlspecialchars($row['jumlah_barang']); ?></td>
                             <td>
-                                <a href="edit.php?edit=<?php echo urlencode($row['id_barang']); ?>" class="btn btn-warning">Edit</a>
+                                <a href="page/barang/edit.php?edit=<?php echo urlencode($row['id_barang']); ?>" class="btn btn-warning">Edit</a>
                                 <a href="#" onclick="confirmDelete('<?php echo urlencode($row['id_barang']); ?>')" class="btn btn-danger">Hapus</a>
                             </td>
                         </tr>
@@ -71,7 +69,7 @@ include '../../layout/header.php';
         </div>
     </section>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function confirmDelete(id) {
     Swal.fire({
@@ -85,7 +83,6 @@ function confirmDelete(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Lakukan AJAX request untuk menghapus data
             fetch('delete.php', {
                 method: 'POST',
                 headers: {
@@ -101,10 +98,10 @@ function confirmDelete(id) {
                     title: data.message,
                     icon: data.icon,
                     confirmButtonText: 'OK',
-                    timer: 2000 // Menampilkan selama 2 detik
+                    timer: 2000
                 });
                 setTimeout(() => {
-                    location.reload(); // Refresh halaman setelah beberapa detik
+                    location.reload();
                 }, 2000);
             })
             .catch(error => {
@@ -118,7 +115,6 @@ function confirmDelete(id) {
     });
 }
 
-// Menampilkan SweetAlert pada halaman load jika ada parameter di URL
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const success = urlParams.get('success');
@@ -131,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
             text: 'Data barang telah ditambahkan ke dalam sistem.',
             confirmButtonText: 'Oke'
         }).then(() => {
-            // Menghapus parameter success setelah ditampilkan
             urlParams.delete('success');
             window.history.replaceState({}, document.title, `${window.location.pathname}?${urlParams.toString()}`);
         });
@@ -144,16 +139,9 @@ document.addEventListener('DOMContentLoaded', function() {
             text: decodeURIComponent(error),
             confirmButtonText: 'Oke'
         }).then(() => {
-            // Menghapus parameter error setelah ditampilkan
             urlParams.delete('error');
             window.history.replaceState({}, document.title, `${window.location.pathname}?${urlParams.toString()}`);
         });
     }
 });
-</script>
-
-
-<!-- Footer -->
-<?php 
-include '../../layout/footer.php';
-?>
+</script> 

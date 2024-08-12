@@ -3,14 +3,18 @@ session_start();
 require_once '../../database/koneksi.php';
 require_once '../../database/class/auth.php';
 
-$auth = new Auth($pdo);
+// Mendapatkan instance PDO dari kelas Koneksi
+$pdo = Koneksi::connect();
+
+// Mendapatkan instance Auth melalui getInstance()
+$auth = Auth::getInstance($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
     
     if ($auth->login($username, $password)) {
-        header('Location: /kasir_abdr/app/page/dashboard/index.php');
+        header('Location: /kasir_abdr/app/index.php');
         exit;
     } else {
         $error = $auth->getError();
@@ -18,27 +22,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AdminLTE 3 | Log in</title>
-<link rel="stylesheet" href="/kasir_abdr/assets/Admin LTE/plugins/fontawesome-free/css/all.min.css">
-<link rel="stylesheet" href="/kasir_abdr/assets/Admin LTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<link rel="stylesheet" href="/kasir_abdr/assets/Admin LTE/dist/css/adminlte.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login -<i>TO</i> _ <b>KO</b></title>
+    <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
-<div class="login-box">
-  <!-- /.login-logo -->
+<div class="login-box" id="app">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="/kasir_abdr/assets/Admin LTE/index2.html" class="h1"><b>Admin</b>LTE</a>
+      <a href="/kasir_abdr/assets/admin_lte/index2.html" class="h1"><i>TO</i> _ <b>KO</b></a>
     </div>
     <div class="card">
       <div class="card-body login-card-body">
         <p class="login-box-msg">Sign in to start your session</p>
-        <form action="" method="post">
+        <form action="login.php" method="post">
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Username" name="username" required>
             <div class="input-group-append">
@@ -74,6 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 </div>
+<script src="/kasir_abdr/assets/admin_lte/plugins/jquery/jquery.min.js"></script>
+<script src="/kasir_abdr/assets/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/kasir_abdr/assets/admin_lte/dist/js/adminlte.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -103,8 +109,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     }
 </script>
-<script src="/kasir_abdr/assets/Admin LTE/plugins/jquery/jquery.min.js"></script>
-<script src="/kasir_abdr/assets/Admin LTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/kasir_abdr/assets/Admin LTE/dist/js/adminlte.min.js"></script>
 </body>
 </html>

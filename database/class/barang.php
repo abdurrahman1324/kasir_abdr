@@ -74,7 +74,7 @@ class Barang {
             $fileType = mime_content_type($fileTmpPath);
             $allowedTypes = ['image/jpeg', 'image/png'];
 
-            if (in_array($fileType, $allowedTypes) && $fileSize < 5 * 1024 * 1024) { // Maksimal 5MB
+            if (in_array($fileType, $allowedTypes) && $fileSize < 10 * 2024 * 2024) { 
                 if (move_uploaded_file($fileTmpPath, $dest_path)) {
                     return $fileName;
                 } else {

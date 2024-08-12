@@ -1,16 +1,24 @@
 <?php
 require_once 'C:/laragon/www/kasir_abdr/database/koneksi.php';
 
-
 class Auth {
     private $pdo;
     private $error;
+    private static $instance = null;
 
-    public function __construct($pdo) {
+    // Constructor privat untuk mencegah instansiasi langsung
+    private function __construct($pdo) {
         $this->pdo = $pdo;
         if (session_status() == PHP_SESSION_NONE) {
             session_start(); // Mulai session jika belum dimulai
         }
+    }
+
+    public static function getInstance($pdo) {
+        if (self::$instance === null) {
+            self::$instance = new self($pdo);
+        }
+        return self::$instance;
     }
 
     public function login($username, $password) {
