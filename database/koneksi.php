@@ -1,5 +1,6 @@
 <?php
 class Koneksi {
+    
     private static $pdo = null;
 
     public static function connect() {

@@ -41,5 +41,19 @@
     <script src="/kasir_abdr/assets/admin_lte/dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="/kasir_abdr/assets/admin_lte/dist/js/pages/dashboard.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- Tambahkan DataTables dan SweetAlert2 JavaScript -->
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    
+    
+<script>
+    $(document).ready(function() {
+    // Pastikan elemen ada sebelum inisialisasi Sparkline
+    if ($('#elementId').length) {
+        new Sparkline($('#elementId'), options);
+    }
+});
+
+</script>

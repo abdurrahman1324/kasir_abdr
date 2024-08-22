@@ -4,7 +4,7 @@ require_once '../../database/koneksi.php';
 require_once '../../database/class/auth.php';
 
 $pdo = Koneksi::connect(); // Pastikan koneksi database sudah diinisialisasi
-$auth = new Auth($pdo);
+$auth = Auth::getInstance($pdo); // Gunakan metode getInstance
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role = $_POST['role'];
 
     if ($auth->register($username, $password, $no_telpon, $alamat, $email, $role)) {
-        // Redirect dengan parameter query string
         header('Location: login.php?register=success');
         exit;
     } else {
@@ -23,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo $error;
     }
 }
+
 ?>
 
 
@@ -33,15 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Register</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <link rel="stylesheet" href="../../assets/Admin LTE/plugins/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="../../assets/Admin LTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <link rel="stylesheet" href="../../assets/Admin LTE/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition register-page">
 <div class="login-box">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="../../assets/Admin LTE/index2.html" class="h1"><b>Admin</b>LTE</a>
+      <a href="/kasir_abdr/assets/admin_lte/index2.html" class="h1"><b>Admin</b>LTE</a>
     </div>
     <div class="card">
       <div class="card-body register-card-body">
@@ -113,10 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </div>
 <!-- jQuery -->
-<script src="../../assets/Admin LTE/plugins/jquery/jquery.min.js"></script>
+<script src="/kasir_abdr/assets/admin_lte/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="../../assets/Admin LTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/kasir_abdr/assets/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../assets/Admin LTE/dist/js/adminlte.min.js"></script>
+<script src="/kasir_abdr/assets/admin_lte/dist/js/adminlte.min.js"></script>
 </body>
 </html>

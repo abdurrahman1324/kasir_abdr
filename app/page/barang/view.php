@@ -1,12 +1,8 @@
 <?php
-include "../database/class/barang.php";
-include "../database/class/page.php";
 
+$page = filter_input(INPUT_GET, 'act', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-$page = isset($_GET["act"]) ? $_GET["act"] : '';
 switch ($page) {
-
-        // Page User
     case 'create':
         include('add.php');
         break;
@@ -15,6 +11,9 @@ switch ($page) {
         break;
     case 'delete':
         include('delete.php');
+        break;
+    case 'delete_all':
+        include('delete_all.php');
         break;
     default:
         include('barang.php');

@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../../database/koneksi.php';
 require_once '../../../database/class/barang.php';
 
@@ -21,11 +22,21 @@ if (isset($_GET['edit'])) {
         exit;
     }
 
+    // Ambil data kategori untuk dropdown
+    $kategoriSql = "SELECT * FROM kategori";
+    $kategoriStmt = $pdo->prepare($kategoriSql);
+    $kategoriStmt->execute();
+    $kategoriList = $kategoriStmt->fetchAll(PDO::FETCH_ASSOC);
+
     // Jika form disubmit
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nama_barang = $_POST['nama_barang'];
-        $harga_barang = $_POST['harga_barang'];
-        $jumlah_barang = $_POST['jumlah_barang'];
+        $nama_barang = filter_var($_POST['nama_barang'], FILTER_SANITIZE_STRING);
+        $id_kategori = filter_var($_POST['id_kategori'], FILTER_VALIDATE_INT);
+        $harga_jual = str_replace('.', '', $_POST['harga_jual']);
+        $harga_jual = filter_var($harga_jual, FILTER_VALIDATE_FLOAT);
+        $harga_beli = str_replace('.', '', $_POST['harga_beli']);
+        $harga_beli = filter_var($harga_beli, FILTER_VALIDATE_FLOAT);
+        $stok = filter_var($_POST['stok'], FILTER_VALIDATE_INT);
         $gambar_lama = $_POST['gambar_lama'];
 
         // Proses upload gambar
@@ -39,15 +50,19 @@ if (isset($_GET['edit'])) {
             }
         }
 
-        try {
-            // Update data barang
-            $barang->updateBarang($id_barang, $nama_barang, $gambar_baru, $harga_barang, $jumlah_barang);
+        if ($harga_jual !== false && $harga_beli !== false && $stok !== false && $id_kategori !== false) {
+            try {
+                // Update data barang
+                $barang->updateBarang($id_barang, $id_kategori, $nama_barang, $gambar_baru, $harga_jual, $harga_beli, $stok);
 
-            // Redirect ke halaman manajemen barang dengan status
-            header('Location: barang.php?status=updated');
-            exit;
-        } catch (Exception $e) {
-            echo '<p>' . $e->getMessage() . '</p>';
+                // Redirect ke halaman manajemen barang dengan status
+                header('Location: /kasir_abdr/app/index.php?page=barang&status=updated');
+                exit;
+            } catch (Exception $e) {
+                echo '<p>' . $e->getMessage() . '</p>';
+            }
+        } else {
+            echo '<p>Data tidak valid.</p>';
         }
     }
 } else {
@@ -62,11 +77,12 @@ include '../../layout/header.php';
 
 <!-- Sidebar -->
 <?php include '../../layout/sidebar.php'; ?>
+<?php include '../../layout/navbar.php'; ?>
 
 <div class="content-wrapper">
     <section class="content mt-3">
         <!-- Card -->
-        <div class="card bg-primary">
+        <div class="card">
             <div class="card-header">
                 <h2>Edit Barang</h2>
             </div>
@@ -78,23 +94,37 @@ include '../../layout/header.php';
                         <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="<?php echo htmlspecialchars($barangData['nama_barang']); ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="gambar_barang">Gambar  : </label>
+                        <label for="id_kategori">Nama Kategori</label>
+                        <select class="form-control" id="id_kategori" name="id_kategori" required>
+                            <?php foreach ($kategoriList as $kategori): ?>
+                                <option value="<?php echo $kategori['id_kategori']; ?>" <?php if ($kategori['id_kategori'] == $barangData['id_kategori']) echo 'selected'; ?>>
+                                    <?php echo htmlspecialchars($kategori['nama_kategori']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gambar_barang">Gambar:</label>
                         <?php if (!empty($barangData['gambar_barang'])): ?>
                             <img src="gambar_barang/<?php echo htmlspecialchars($barangData['gambar_barang']); ?>" alt="image" style="width: 200px; height: auto;">
                         <?php endif; ?>
                         <input type="file" class="form-control" id="gambar_barang" name="gambar_barang">
                     </div>
                     <div class="form-group">
-                        <label for="harga_barang">Harga Barang</label>
-                        <input type="number" class="form-control" id="harga_barang" name="harga_barang" step="0.01" value="<?php echo htmlspecialchars($barangData['harga_barang']); ?>" required>
+                        <label for="stok">Stok</label>
+                        <input type="number" class="form-control" id="stok" name="stok" value="<?php echo htmlspecialchars($barangData['stok']); ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="jumlah_barang">Jumlah Barang</label>
-                        <input type="number" class="form-control" id="jumlah_barang" name="jumlah_barang" value="<?php echo htmlspecialchars($barangData['jumlah_barang']); ?>" required>
+                        <label for="harga_jual">Harga Jual</label>
+                        <input type="text" class="form-control" id="harga_jual" name="harga_jual" value="<?php echo htmlspecialchars(number_format($barangData['harga_jual'], 0, '', '.')); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="harga_beli">Harga Beli</label>
+                        <input type="text" class="form-control" id="harga_beli" name="harga_beli" value="<?php echo htmlspecialchars(number_format($barangData['harga_beli'], 0, '', '.')); ?>" required>
                     </div>
                     <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                    <a href="barang.php" class="btn btn-warning">Kembali</a>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <a href="/kasir_abdr/app/index.php?page=barang" class="btn btn-warning">Batal</a>
                     </div>
                 </form>
             </div>
@@ -104,3 +134,20 @@ include '../../layout/header.php';
 
 <!-- Footer -->
 <?php include '../../layout/footer.php'; ?>
+
+<!-- JavaScript untuk Format Angka -->
+<script>
+    function formatNumberInput(input) {
+        let value = input.value.replace(/\D/g, '');
+        let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = formattedValue;
+    }
+
+    document.getElementById('harga_jual').addEventListener('input', function() {
+        formatNumberInput(this);
+    });
+
+    document.getElementById('harga_beli').addEventListener('input', function() {
+        formatNumberInput(this);
+    });
+</script>

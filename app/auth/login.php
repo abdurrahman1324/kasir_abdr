@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login -<i>TO</i> _ <b>KO</b></title>
+    <title>Login -| TO _ KO</title>
     <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="/kasir_abdr/assets/admin_lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
